@@ -16,6 +16,7 @@ jobs:
         run: npm install --save-dev dd-trace
       - name: Run tests and collect coverage
         run: npm run test
+        shell: bash
         env:
           DD_CIVISIBILITY_AGENTLESS_ENABLED: true
           DD_API_KEY: ${{secrets.DD_API_KEY}}
