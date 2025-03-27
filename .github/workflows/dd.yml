@@ -12,13 +12,12 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: npm install
-      - name: Configure Datadog Test Optimization
-        uses: datadog/test-visibility-github-action@v2
-        with:
-          languages: js
-          api_key: ${{secrets.DD_API_KEY}}
-          site: datadoghq.eu
+      - name: Install DataDog tracer
+        run: npm install --save-dev dd-trace
       - name: Run tests and collect coverage
         run: npm run test
         env:
-          NODE_OPTIONS: -r ${{env.DD_TRACE_PACKAGE}}
+          DD_CIVISIBILITY_AGENTLESS_ENABLED: true
+          DD_API_KEY: ${{secrets.DD_API_KEY}}
+          DD_SITE: datadoghq.eu
+          NODE_OPTIONS: "-r dd-trace/ci/init"
