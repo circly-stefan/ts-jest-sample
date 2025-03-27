@@ -1,0 +1,24 @@
+name: Workflow for Codecov example-javascript
+on: [push, pull_request]
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm install
+      - name: Configure Datadog Test Optimization
+        uses: datadog/test-visibility-github-action@v2
+        with:
+          languages: js
+          api_key: ${{secrets.DD_API_KEY}}
+          site: datadoghq.eu
+      - name: Run tests and collect coverage
+        run: npm run test
+        env:
+          NODE_OPTIONS: -r ${{env.DD_TRACE_PACKAGE}}
